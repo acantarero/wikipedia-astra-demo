@@ -3,6 +3,7 @@ from time import time
 
 import torch
 from flask import Flask, request, jsonify
+from loguru import logger
 from transformers import AutoTokenizer, AutoModel
 from torch import Tensor
 import torch.nn.functional as f
@@ -40,6 +41,10 @@ def get_embedding(text: str, model: str) -> List[float]:
     embeddings = average_pool(outputs.last_hidden_state, inputs['attention_mask'])
     return f.normalize(embeddings, p=2, dim=1).cpu().tolist()[0]
 
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({'status': 'ok'})
+
 @app.route('/embed', methods=['POST'])
 def embed():
     data = request.get_json(force=True)
@@ -49,6 +54,8 @@ def embed():
 
     embeddings_list = [get_embedding(text, model) for text in texts]
 
+    logger.info(f"Completed embedding.")
+    
     return jsonify(embeddings_list)
 
 if __name__ == '__main__':
@@ -60,4 +67,5 @@ if __name__ == '__main__':
         print("Environment variable MY_ENV_VAR is not a valid integer")
         app_port = 5000
 
-    app.run(port=app_port)
+    logger.info("Starting embedding server.")
+    app.run(host="0.0.0.0", port=app_port)

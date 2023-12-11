@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+  embedding_service:
+    build:
+      context: server/embedding-microservice
+      dockerfile: Dockerfile 
+    volumes:
+      - ./server/embedding-microservice/:/embedding_service/
+      - ./model_files/:/embedding_service/model_files/
+    ports:
+      - 5000:5000
+    #command: sh -c "
+    #  gunicorn --workers 1 microservice:app --bind 0.0.0.0:5000"
+    command: sh -c "python microservice.py"
+  frontend:
+    build:
+      context: client
+      dockerfile: Dockerfile 
+    volumes: 
+      - .:/client
+    ports:
+      - 5173:5173
+    restart: always
+    command: 
+      sh -c "npm run dev -- --host 0.0.0.0"
+  spring_app:
+    build:
+      context: server
+      dockerfile: Dockerfile 
+    volumes:
+      - .:/spring_app
+    env_file:
+      - .env
+    ports:
+      - 8081:8081
+    restart: always
+    command: 
+      sh -c "java -jar /app/app.jar"
+    

@@ -18,7 +18,7 @@ server:
 
 astra-demo:
   embedding-service:
-    url: ${ASTRA_DEMO_EMBEDDING_SERVICE_URL:http://localhost:5000/embed}
+    url: ${ASTRA_DEMO_EMBEDDING_SERVICE_URL:http://embedding_service:5000/embed}
     model: ${ASTRA_DEMO_EMBEDDING_SERVICE_MODEL:base_v2}
     dims: ${ASTRA_DEMO_EMBEDDING_SERVICE_DIMS:768}
   entry-ttl: ${ASTRA_DEMO_ENTITY_TTL:86400}

@@ -1,3 +1,12 @@
+## Notes for running in Docker
+
+Defaults for swap space and disk space may be too small.
+
+If using docker desktop on MacOS suggest setting swap to 4 GB and virtual disk limit to at least around 100 GB.  
+
+These numbers have not been carefully tested.
+
+
 ## Disclaimer
 
 There may some delay between what you see being parsed due to the speed of the embedding service,
